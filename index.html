@@ -1,19 +1,18 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Random Groep Generatie Machine</title>
+  <title>Class Group Generator</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-<h1>🎲 Groep Generatie Machine</h1>
+<h1>🎲 Group Generator</h1>
 
 <!-- ATTENDANCE SCREEN -->
 <div id="attendanceScreen">
-  <h2>Aanwezigheid</h2>
+  <h2>Who is present today?</h2>
   <div id="attendanceList"></div>
   <button id="continueBtn">Continue</button>
 </div>
@@ -23,13 +22,13 @@
 
   <div class="controls">
     <label>
-      Groepgrootte:
+      Group size:
       <input type="number" id="groupSize" min="2" max="6" value="4">
     </label>
 
-    <button id="generateBtn">Genereer Groepen</button>
-    <button id="projectorBtn">Projector Mode</button>
-    <button id="resetBtn" class="secondary">Reset Geheugen</button>
+    <button id="generateBtn">Generate Groups</button>
+    <button id="backBtn" class="secondary">Back to Attendance</button>
+    <button id="resetBtn" class="secondary">Reset History</button>
   </div>
 
   <div id="score"></div>
