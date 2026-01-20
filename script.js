@@ -1,5 +1,5 @@
 /***********************
- * CONFIGURATION
+ * CONFIGURATIE
  ***********************/
 const ALL_STUDENTS = [
   "Alice","Bob","Charlie","Diana","Emma","Frank","Grace","Henry",
@@ -12,12 +12,12 @@ const ALL_STUDENTS = [
 const MAX_ATTEMPTS = 300;
 
 /***********************
- * STATE
+ * STATUS
  ***********************/
 let activeStudents = [];
 
 /***********************
- * STORAGE
+ * OPSLAG
  ***********************/
 function loadHistory() {
   return JSON.parse(localStorage.getItem("pairHistory")) || {};
@@ -28,7 +28,7 @@ function saveHistory(history) {
 }
 
 /***********************
- * UTILITIES
+ * HULPFUNCTIES
  ***********************/
 function shuffle(array) {
   return [...array].sort(() => Math.random() - 0.5);
@@ -39,7 +39,7 @@ function getPairKey(a, b) {
 }
 
 /***********************
- * GROUPING LOGIC
+ * GROEPEN MAKEN
  ***********************/
 function splitIntoGroups(list, size) {
   const groups = [];
@@ -95,13 +95,13 @@ function generateSmartGroups(groupSize) {
 }
 
 /***********************
- * SCREEN CONTROL (FIX)
+ * SCHERMEN
  ***********************/
 const attendanceScreen = document.getElementById("attendanceScreen");
 const appScreen = document.getElementById("app");
 
 /***********************
- * ATTENDANCE SCREEN
+ * AANWEZIGHEID
  ***********************/
 const attendanceList = document.getElementById("attendanceList");
 const continueBtn = document.getElementById("continueBtn");
@@ -124,7 +124,7 @@ continueBtn.onclick = () => {
     .map(cb => cb.parentElement.textContent.trim());
 
   if (activeStudents.length < 2) {
-    alert("Not enough students present.");
+    alert("Niet genoeg leerlingen aanwezig.");
     return;
   }
 
@@ -140,7 +140,7 @@ backBtn.onclick = () => {
 };
 
 /***********************
- * GROUP DISPLAY
+ * WEERGAVE
  ***********************/
 const groupsDiv = document.getElementById("groups");
 const scoreDiv = document.getElementById("score");
@@ -152,7 +152,7 @@ function renderGroups(groups) {
     const div = document.createElement("div");
     div.className = "group";
     div.innerHTML = `
-      <h2>Group ${i + 1}</h2>
+      <h2>Groep ${i + 1}</h2>
       <p>${group.join("<br>")}</p>
     `;
     groupsDiv.appendChild(div);
@@ -162,25 +162,25 @@ function renderGroups(groups) {
 }
 
 /***********************
- * CONTROLS
+ * KNOPPEN
  ***********************/
 document.getElementById("generateBtn").onclick = () => {
   const size = +document.getElementById("groupSize").value;
   const result = generateSmartGroups(size);
 
   const maxCost = activeStudents.length * 5;
-  const newness = Math.max(
+  const nieuwheid = Math.max(
     0,
     100 - Math.round((result.cost / maxCost) * 100)
   );
 
-  scoreDiv.textContent = `Newness score: ${newness}%`;
+  scoreDiv.textContent = `Nieuwheidsscore: ${nieuwheid}%`;
   renderGroups(result.groups);
 };
 
 document.getElementById("resetBtn").onclick = () => {
-  if (confirm("Reset group history?")) {
+  if (confirm("Weet je zeker dat je de geschiedenis wilt resetten?")) {
     localStorage.removeItem("pairHistory");
-    alert("History cleared.");
+    alert("Geschiedenis is gewist.");
   }
 };
