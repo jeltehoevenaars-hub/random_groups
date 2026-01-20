@@ -28,11 +28,13 @@ button.secondary {
   background: #ddd;
 }
 
-/* ATTENDANCE */
+/* ATTENDANCE — FORCE VERTICAL */
 #attendanceList {
   max-width: 320px;
   margin: 0 auto 1.5rem;
-  text-align: left;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
 }
 
 .attendee {
@@ -40,6 +42,7 @@ button.secondary {
   padding: 0.4rem 0.6rem;
   border-radius: 6px;
   margin-bottom: 0.3rem;
+  text-align: left;
 }
 
 /* GROUPS */
