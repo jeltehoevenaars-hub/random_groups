@@ -5,7 +5,7 @@ const students = [
   "Alice", "Bob", "Charlie", "Diana",
   "Emma", "Frank", "Grace", "Henry",
   "Isabel", "Jack", "Karen", "Leo",
-  "Mona", "Nina", "Oscar", "Paul"
+  "Mona", "Nina", "Oscar"
   // add all names here
 ];
 
