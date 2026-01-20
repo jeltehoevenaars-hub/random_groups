@@ -7,7 +7,7 @@ const ALL_STUDENTS = [
   "Quinn","Rachel","Sam","Tina","Uma","Victor","Wendy","Xander",
   "Yara","Zoe","Alan","Bella","Carl","Dana","Eli","Fiona",
   "Gabe","Holly","Ian"
-].sort();
+].sort((a, b) => a.localeCompare(b));
 
 const MAX_ATTEMPTS = 300;
 
@@ -95,6 +95,12 @@ function generateSmartGroups(groupSize) {
 }
 
 /***********************
+ * SCREEN CONTROL (FIX)
+ ***********************/
+const attendanceScreen = document.getElementById("attendanceScreen");
+const appScreen = document.getElementById("app");
+
+/***********************
  * ATTENDANCE SCREEN
  ***********************/
 const attendanceList = document.getElementById("attendanceList");
@@ -122,15 +128,15 @@ continueBtn.onclick = () => {
     return;
   }
 
-  document.getElementById("attendanceScreen").classList.add("hidden");
-  document.getElementById("app").classList.remove("hidden");
+  attendanceScreen.classList.add("hidden");
+  appScreen.classList.remove("hidden");
 };
 
 backBtn.onclick = () => {
-  document.getElementById("app").classList.add("hidden");
+  appScreen.classList.add("hidden");
+  attendanceScreen.classList.remove("hidden");
   document.getElementById("groups").innerHTML = "";
   document.getElementById("score").textContent = "";
-  document.getElementById("attendanceScreen").classList.remove("hidden");
 };
 
 /***********************
