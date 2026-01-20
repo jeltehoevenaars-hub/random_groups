@@ -1,39 +1,41 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="nl">
 <head>
   <meta charset="UTF-8" />
-  <title>Class Group Generator</title>
+  <title>Groepen Machine voor Groep 6 van Juf Martine</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-<h1>🎲 Group Generator</h1>
+<h1>🎲 Groepen Machine voor Groep 6 van Juf Martine</h1>
 
-<!-- ATTENDANCE SCREEN -->
+<!-- AANWEZIGHEIDSSCHERM -->
 <div id="attendanceScreen">
-  <h2>Who is present today?</h2>
+  <h2>Aanwezigheid</h2>
   <div id="attendanceList"></div>
-  <button id="continueBtn">Continue</button>
+  <button id="continueBtn">Verder</button>
 </div>
 
-<!-- MAIN APP -->
+<!-- HOOFDSCHERM -->
 <div id="app" class="hidden">
 
   <div class="controls">
-    <label>
-      Group size:
+    <label class="group-size-label">
+      Groepsgrootte:
       <input type="number" id="groupSize" min="2" max="6" value="4">
     </label>
 
-    <button id="generateBtn">Generate Groups</button>
-    <button id="backBtn" class="secondary">Back to Attendance</button>
-    <button id="resetBtn" class="secondary">Reset History</button>
+    <button id="generateBtn">Genereer Groepen</button>
+    <button id="backBtn" class="secondary">Terug naar Aanwezigheid</button>
   </div>
 
   <div id="score"></div>
   <div id="groups"></div>
 </div>
+
+<!-- RESET KNOP -->
+<button id="resetBtn" class="reset-corner">Reset</button>
 
 <script src="script.js"></script>
 </body>
