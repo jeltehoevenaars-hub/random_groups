@@ -2,13 +2,13 @@
 <html lang="nl">
 <head>
   <meta charset="UTF-8" />
-  <title>Groepen Machine voor Groep 6 van Juf Martine</title>
+  <title>Groepen Machine voor Juf Martine</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-<h1>🎲 Groepen Machine voor Groep 6 van Juf Martine</h1>
+<h1>🎲 Groepen Machine voor Juf Martine</h1>
 
 <!-- AANWEZIGHEIDSSCHERM -->
 <div id="attendanceScreen">
@@ -20,21 +20,22 @@
 <!-- HOOFDSCHERM -->
 <div id="app" class="hidden">
 
+  <!-- TERUG NAAR AANWEZIGHEID -->
+  <button id="backBtn" class="back-top">← Terug naar Aanwezigheid</button>
+
   <div class="controls">
     <label class="group-size-label">
       Groepsgrootte:
       <input type="number" id="groupSize" min="2" max="6" value="4">
     </label>
 
-    <button id="generateBtn">Genereer Groepen</button>
-    <button id="backBtn" class="secondary">Terug naar Aanwezigheid</button>
+    <button id="generateBtn" class="generate">Genereer Groepen</button>
   </div>
 
-  <div id="score"></div>
   <div id="groups"></div>
 </div>
 
-<!-- RESET KNOP -->
+<!-- RESET GESCHIEDENIS -->
 <button id="resetBtn" class="reset-corner">Reset</button>
 
 <script src="script.js"></script>
