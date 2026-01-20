@@ -1,19 +1,20 @@
 /***********************
  * CONFIGURATION
  ***********************/
-const students = [
-  "Alice", "Bob", "Charlie", "Diana",
-  "Emma", "Frank", "Grace", "Henry",
-  "Isabel", "Jack", "Karen", "Leo",
-  "Mona", "Nina", "Oscar", "Paul",
-  "Quinn", "Rachel", "Sam", "Tina",
-  "Uma", "Victor", "Wendy", "Xander",
-  "Yara", "Zoe", "Alan", "Bella",
-  "Carl", "Dana", "Eli", "Fiona",
-  "Gabe", "Holly", "Ian"
+const ALL_STUDENTS = [
+  "Alice","Bob","Charlie","Diana","Emma","Frank","Grace","Henry",
+  "Isabel","Jack","Karen","Leo","Mona","Nina","Oscar","Paul",
+  "Quinn","Rachel","Sam","Tina","Uma","Victor","Wendy","Xander",
+  "Yara","Zoe","Alan","Bella","Carl","Dana","Eli","Fiona",
+  "Gabe","Holly","Ian"
 ];
 
 const MAX_ATTEMPTS = 300;
+
+/***********************
+ * STATE
+ ***********************/
+let activeStudents = [];
 
 /***********************
  * STORAGE
@@ -30,10 +31,7 @@ function saveHistory(history) {
  * UTILITIES
  ***********************/
 function shuffle(array) {
-  return array
-    .map(value => ({ value, sort: Math.random() }))
-    .sort((a, b) => a.sort - b.sort)
-    .map(({ value }) => value);
+  return [...array].sort(() => Math.random() - 0.5);
 }
 
 function getPairKey(a, b) {
@@ -43,24 +41,13 @@ function getPairKey(a, b) {
 /***********************
  * GROUPING LOGIC
  ***********************/
-function splitIntoGroups(list, groupSize) {
+function splitIntoGroups(list, size) {
   const groups = [];
-  const total = list.length;
+  let i = 0;
 
-  const fullGroups = Math.floor(total / groupSize);
-  const remainder = total % groupSize;
-
-  let index = 0;
-
-  // Create full-sized groups
-  for (let i = 0; i < fullGroups; i++) {
-    groups.push(list.slice(index, index + groupSize));
-    index += groupSize;
-  }
-
-  // Create one smaller group if needed
-  if (remainder > 0) {
-    groups.push(list.slice(index, index + remainder));
+  while (i < list.length) {
+    groups.push(list.slice(i, i + size));
+    i += size;
   }
 
   return groups;
@@ -72,8 +59,7 @@ function groupCost(groups, history) {
   for (const group of groups) {
     for (let i = 0; i < group.length; i++) {
       for (let j = i + 1; j < group.length; j++) {
-        const key = getPairKey(group[i], group[j]);
-        cost += history[key] || 0;
+        cost += history[getPairKey(group[i], group[j])] || 0;
       }
     }
   }
@@ -83,12 +69,10 @@ function groupCost(groups, history) {
 
 function generateSmartGroups(groupSize) {
   const history = loadHistory();
-  let bestGroups = null;
-  let bestCost = Infinity;
+  let bestGroups, bestCost = Infinity;
 
   for (let i = 0; i < MAX_ATTEMPTS; i++) {
-    const shuffled = shuffle(students);
-    const groups = splitIntoGroups(shuffled, groupSize);
+    const groups = splitIntoGroups(shuffle(activeStudents), groupSize);
     const cost = groupCost(groups, history);
 
     if (cost < bestCost) {
@@ -98,51 +82,93 @@ function generateSmartGroups(groupSize) {
   }
 
   // Update history
-  for (const group of bestGroups) {
+  bestGroups.forEach(group => {
     for (let i = 0; i < group.length; i++) {
       for (let j = i + 1; j < group.length; j++) {
         const key = getPairKey(group[i], group[j]);
         history[key] = (history[key] || 0) + 1;
       }
     }
-  }
+  });
 
   saveHistory(history);
-  return bestGroups;
+  return { groups: bestGroups, cost: bestCost };
 }
 
 /***********************
- * UI
+ * UI – ATTENDANCE
+ ***********************/
+const attendanceList = document.getElementById("attendanceList");
+const continueBtn = document.getElementById("continueBtn");
+
+ALL_STUDENTS.forEach(name => {
+  const div = document.createElement("div");
+  div.className = "attendee";
+  div.innerHTML = `
+    <label>
+      <input type="checkbox" checked> ${name}
+    </label>
+  `;
+  attendanceList.appendChild(div);
+});
+
+continueBtn.onclick = () => {
+  activeStudents = [...attendanceList.querySelectorAll("input")]
+    .filter(cb => cb.checked)
+    .map(cb => cb.parentElement.textContent.trim());
+
+  if (activeStudents.length < 2) {
+    alert("Not enough students present.");
+    return;
+  }
+
+  document.getElementById("attendanceScreen").classList.add("hidden");
+  document.getElementById("app").classList.remove("hidden");
+};
+
+/***********************
+ * UI – GROUP DISPLAY
  ***********************/
 const groupsDiv = document.getElementById("groups");
-const generateBtn = document.getElementById("generateBtn");
-const resetBtn = document.getElementById("resetBtn");
+const scoreDiv = document.getElementById("score");
 
 function renderGroups(groups) {
   groupsDiv.innerHTML = "";
 
-  groups.forEach((group, index) => {
+  groups.forEach((group, i) => {
     const div = document.createElement("div");
     div.className = "group";
-
     div.innerHTML = `
-      <h2>Group ${index + 1} (${group.length})</h2>
+      <h2>Group ${i + 1} (${group.length})</h2>
       <p>${group.join("<br>")}</p>
     `;
-
     groupsDiv.appendChild(div);
+
+    setTimeout(() => div.classList.add("visible"), i * 400);
   });
 }
 
-generateBtn.addEventListener("click", () => {
-  const size = parseInt(document.getElementById("groupSize").value, 10);
-  const groups = generateSmartGroups(size);
-  renderGroups(groups);
-});
+/***********************
+ * CONTROLS
+ ***********************/
+document.getElementById("generateBtn").onclick = () => {
+  const size = +document.getElementById("groupSize").value;
+  const result = generateSmartGroups(size);
 
-resetBtn.addEventListener("click", () => {
-  if (confirm("Really reset all group history?")) {
+  const maxCost = activeStudents.length * 5;
+  const newness = Math.max(0, 100 - Math.round((result.cost / maxCost) * 100));
+
+  scoreDiv.textContent = `Newness score: ${newness}%`;
+  renderGroups(result.groups);
+};
+
+document.getElementById("resetBtn").onclick = () => {
+  if (confirm("Reset group history?")) {
     localStorage.removeItem("pairHistory");
     alert("History cleared.");
   }
-});
+};
+
+document.getElementById("projectorBtn").onclick = () => {
+  document.documentElement.classList.toggle("projector");
+};
