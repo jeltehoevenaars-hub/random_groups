@@ -7,7 +7,7 @@ const ALL_STUDENTS = [
   "Quinn","Rachel","Sam","Tina","Uma","Victor","Wendy","Xander",
   "Yara","Zoe","Alan","Bella","Carl","Dana","Eli","Fiona",
   "Gabe","Holly","Ian"
-];
+].sort();
 
 const MAX_ATTEMPTS = 300;
 
@@ -81,7 +81,6 @@ function generateSmartGroups(groupSize) {
     }
   }
 
-  // Update history
   bestGroups.forEach(group => {
     for (let i = 0; i < group.length; i++) {
       for (let j = i + 1; j < group.length; j++) {
@@ -96,10 +95,11 @@ function generateSmartGroups(groupSize) {
 }
 
 /***********************
- * UI – ATTENDANCE
+ * ATTENDANCE SCREEN
  ***********************/
 const attendanceList = document.getElementById("attendanceList");
 const continueBtn = document.getElementById("continueBtn");
+const backBtn = document.getElementById("backBtn");
 
 ALL_STUDENTS.forEach(name => {
   const div = document.createElement("div");
@@ -126,8 +126,15 @@ continueBtn.onclick = () => {
   document.getElementById("app").classList.remove("hidden");
 };
 
+backBtn.onclick = () => {
+  document.getElementById("app").classList.add("hidden");
+  document.getElementById("groups").innerHTML = "";
+  document.getElementById("score").textContent = "";
+  document.getElementById("attendanceScreen").classList.remove("hidden");
+};
+
 /***********************
- * UI – GROUP DISPLAY
+ * GROUP DISPLAY
  ***********************/
 const groupsDiv = document.getElementById("groups");
 const scoreDiv = document.getElementById("score");
@@ -139,7 +146,7 @@ function renderGroups(groups) {
     const div = document.createElement("div");
     div.className = "group";
     div.innerHTML = `
-      <h2>Group ${i + 1} (${group.length})</h2>
+      <h2>Group ${i + 1}</h2>
       <p>${group.join("<br>")}</p>
     `;
     groupsDiv.appendChild(div);
@@ -156,7 +163,10 @@ document.getElementById("generateBtn").onclick = () => {
   const result = generateSmartGroups(size);
 
   const maxCost = activeStudents.length * 5;
-  const newness = Math.max(0, 100 - Math.round((result.cost / maxCost) * 100));
+  const newness = Math.max(
+    0,
+    100 - Math.round((result.cost / maxCost) * 100)
+  );
 
   scoreDiv.textContent = `Newness score: ${newness}%`;
   renderGroups(result.groups);
@@ -167,8 +177,4 @@ document.getElementById("resetBtn").onclick = () => {
     localStorage.removeItem("pairHistory");
     alert("History cleared.");
   }
-};
-
-document.getElementById("projectorBtn").onclick = () => {
-  document.documentElement.classList.toggle("projector");
 };
