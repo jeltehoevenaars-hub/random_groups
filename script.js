@@ -5,8 +5,12 @@ const students = [
   "Alice", "Bob", "Charlie", "Diana",
   "Emma", "Frank", "Grace", "Henry",
   "Isabel", "Jack", "Karen", "Leo",
-  "Mona", "Nina", "Oscar"
-  // add all names here
+  "Mona", "Nina", "Oscar", "Paul",
+  "Quinn", "Rachel", "Sam", "Tina",
+  "Uma", "Victor", "Wendy", "Xander",
+  "Yara", "Zoe", "Alan", "Bella",
+  "Carl", "Dana", "Eli", "Fiona",
+  "Gabe", "Holly", "Ian"
 ];
 
 const MAX_ATTEMPTS = 300;
@@ -39,11 +43,26 @@ function getPairKey(a, b) {
 /***********************
  * GROUPING LOGIC
  ***********************/
-function splitIntoGroups(list, size) {
+function splitIntoGroups(list, groupSize) {
   const groups = [];
-  for (let i = 0; i < list.length; i += size) {
-    groups.push(list.slice(i, i + size));
+  const total = list.length;
+
+  const fullGroups = Math.floor(total / groupSize);
+  const remainder = total % groupSize;
+
+  let index = 0;
+
+  // Create full-sized groups
+  for (let i = 0; i < fullGroups; i++) {
+    groups.push(list.slice(index, index + groupSize));
+    index += groupSize;
   }
+
+  // Create one smaller group if needed
+  if (remainder > 0) {
+    groups.push(list.slice(index, index + remainder));
+  }
+
   return groups;
 }
 
@@ -107,7 +126,7 @@ function renderGroups(groups) {
     div.className = "group";
 
     div.innerHTML = `
-      <h2>Group ${index + 1}</h2>
+      <h2>Group ${index + 1} (${group.length})</h2>
       <p>${group.join("<br>")}</p>
     `;
 
