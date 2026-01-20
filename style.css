@@ -28,20 +28,21 @@ button.secondary {
   background: #ddd;
 }
 
+/* ATTENDANCE */
 #attendanceList {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-  gap: 0.5rem;
-  margin-bottom: 1.5rem;
+  max-width: 320px;
+  margin: 0 auto 1.5rem;
+  text-align: left;
 }
 
 .attendee {
   background: white;
-  padding: 0.5rem;
+  padding: 0.4rem 0.6rem;
   border-radius: 6px;
-  text-align: left;
+  margin-bottom: 0.3rem;
 }
 
+/* GROUPS */
 #groups {
   display: flex;
   flex-wrap: wrap;
@@ -65,23 +66,7 @@ button.secondary {
   transform: translateY(0);
 }
 
-/* PROJECTOR MODE */
-.projector body {
-  background: black;
-  color: white;
-}
-
-.projector .group {
-  background: #222;
-  color: white;
-  width: 260px;
-}
-
-.projector h1 {
-  font-size: 3.5rem;
-}
-
 #score {
-  font-size: 1.3rem;
+  font-size: 1.2rem;
   margin-bottom: 1rem;
 }
