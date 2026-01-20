@@ -91,7 +91,7 @@ function generateSmartGroups(groupSize) {
   });
 
   saveHistory(history);
-  return { groups: bestGroups, cost: bestCost };
+  return bestGroups;
 }
 
 /***********************
@@ -136,14 +136,13 @@ backBtn.onclick = () => {
   appScreen.classList.add("hidden");
   attendanceScreen.classList.remove("hidden");
   document.getElementById("groups").innerHTML = "";
-  document.getElementById("score").textContent = "";
 };
 
 /***********************
- * WEERGAVE
+ * WEERGAVE + ANIMATIE
  ***********************/
 const groupsDiv = document.getElementById("groups");
-const scoreDiv = document.getElementById("score");
+const generateBtn = document.getElementById("generateBtn");
 
 function renderGroups(groups) {
   groupsDiv.innerHTML = "";
@@ -157,25 +156,23 @@ function renderGroups(groups) {
     `;
     groupsDiv.appendChild(div);
 
-    setTimeout(() => div.classList.add("visible"), i * 400);
+    setTimeout(() => div.classList.add("visible"), i * 300);
   });
 }
 
 /***********************
  * KNOPPEN
  ***********************/
-document.getElementById("generateBtn").onclick = () => {
-  const size = +document.getElementById("groupSize").value;
-  const result = generateSmartGroups(size);
+generateBtn.onclick = () => {
+  groupsDiv.classList.add("shuffling");
+  groupsDiv.innerHTML = "<p>Groepen worden gemaakt...</p>";
 
-  const maxCost = activeStudents.length * 5;
-  const nieuwheid = Math.max(
-    0,
-    100 - Math.round((result.cost / maxCost) * 100)
-  );
-
-  scoreDiv.textContent = `Nieuwheidsscore: ${nieuwheid}%`;
-  renderGroups(result.groups);
+  setTimeout(() => {
+    groupsDiv.classList.remove("shuffling");
+    const size = +document.getElementById("groupSize").value;
+    const groups = generateSmartGroups(size);
+    renderGroups(groups);
+  }, 900);
 };
 
 document.getElementById("resetBtn").onclick = () => {
