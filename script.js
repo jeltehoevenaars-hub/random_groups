@@ -67,12 +67,12 @@ function groupCost(groups, history) {
   return cost;
 }
 
-function generateSmartGroups(groupSize) {
+function generateSmartGroups(groupSize, students) {
   const history = loadHistory();
   let bestGroups, bestCost = Infinity;
 
   for (let i = 0; i < MAX_ATTEMPTS; i++) {
-    const groups = splitIntoGroups(shuffle(activeStudents), groupSize);
+    const groups = splitIntoGroups(shuffle(students), groupSize);
     const cost = groupCost(groups, history);
 
     if (cost < bestCost) {
@@ -107,6 +107,13 @@ const attendanceList = document.getElementById("attendanceList");
 const continueBtn = document.getElementById("continueBtn");
 const backBtn = document.getElementById("backBtn");
 
+/* LEES AANWEZIGHEID */
+function readActiveStudents() {
+  activeStudents = [...attendanceList.querySelectorAll("input")]
+    .filter(cb => cb.checked)
+    .map(cb => cb.parentElement.textContent.trim());
+}
+
 ALL_STUDENTS.forEach(name => {
   const div = document.createElement("div");
   div.className = "attendee";
@@ -119,9 +126,7 @@ ALL_STUDENTS.forEach(name => {
 });
 
 continueBtn.onclick = () => {
-  activeStudents = [...attendanceList.querySelectorAll("input")]
-    .filter(cb => cb.checked)
-    .map(cb => cb.parentElement.textContent.trim());
+  readActiveStudents();
 
   if (activeStudents.length < 2) {
     alert("Niet genoeg leerlingen aanwezig.");
@@ -164,13 +169,20 @@ function renderGroups(groups) {
  * KNOPPEN
  ***********************/
 generateBtn.onclick = () => {
+  readActiveStudents();
+
+  if (activeStudents.length < 2) {
+    alert("Niet genoeg leerlingen geselecteerd.");
+    return;
+  }
+
   groupsDiv.classList.add("shuffling");
   groupsDiv.innerHTML = "<p>Groepen worden gemaakt...</p>";
 
   setTimeout(() => {
     groupsDiv.classList.remove("shuffling");
     const size = +document.getElementById("groupSize").value;
-    const groups = generateSmartGroups(size);
+    const groups = generateSmartGroups(size, activeStudents);
     renderGroups(groups);
   }, 900);
 };
